@@ -3,8 +3,8 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.asiainfo</groupId>
 	<artifactId>maven-build</artifactId>
-	<packaging>jar</packaging>
-	<version>0.0.1-SNAPSHOT</version>
+	<packaging>war</packaging>
+	<version>1.0.0</version>
 	<name>maven-build Webapp</name>
 	<url>http://maven.apache.org</url>
 	
@@ -278,11 +278,11 @@
 					<encoding>${project.build.sourceEncoding}</encoding>
 					<compilerArgs>
 						<arg>-extdirs</arg>
-					    <arg>${project.basedir}/src/main/webapp/WEB-INF/lib</arg>
+					    <arg>${project.basedir}/lib</arg>
 					</compilerArgs>
 				</configuration>
 			</plugin>
-
+			<!-- 
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-jar-plugin</artifactId>
@@ -306,7 +306,7 @@
 					</includes>
 				</configuration>
 			</plugin>
-			<!-- <plugin>
+			<plugin>
 	            <groupId>org.apache.maven.plugins</groupId>
 	            <artifactId>maven-dependency-plugin</artifactId>
 	            <version>3.0.0</version>
@@ -379,15 +379,19 @@
 		                </configuration>
 		            </execution>
 		        </executions>
-			</plugin>
+			</plugin> -->
 			
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-war-plugin</artifactId>
 				<version>3.0.0</version>
 				<configuration>
-					<warName>${project.artifactId}-webapp-${project.version}</warName>
-					<packagingExcludes>demos/**,WEB-INF/lib/junit-*.jar</packagingExcludes>
+					<warName>${project.artifactId}-${project.version}</warName>
+					<classifier>${env}</classifier>
+					<!-- 打war包时，同时打jar包 -->
+					<attachClasses>true</attachClasses>
+    				<classesClassifier>${env}-api</classesClassifier>
+					<packagingExcludes>demos/**,lib/junit-*.jar</packagingExcludes>
 					<webResources>
 						<resource>
 							<directory>${project.basedir}/lib</directory>
@@ -407,7 +411,7 @@
 					<filteringDeploymentDescriptors>true</filteringDeploymentDescriptors>
 					<failOnMissingWebXml>true</failOnMissingWebXml>
 				</configuration>
-			</plugin> -->
+			</plugin>
 			
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
