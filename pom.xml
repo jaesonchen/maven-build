@@ -282,8 +282,7 @@
 					</compilerArgs>
 				</configuration>
 			</plugin>
-			<!-- 
-			<plugin>
+			<!-- <plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-jar-plugin</artifactId>
 				<version>3.0.2</version>
@@ -305,8 +304,9 @@
 						<include>**/service/*</include>
 					</includes>
 				</configuration>
-			</plugin>
-			<plugin>
+			</plugin> -->
+			<!-- 打包时，输出依赖jar到指定目录 -->
+			<!-- <plugin>
 	            <groupId>org.apache.maven.plugins</groupId>
 	            <artifactId>maven-dependency-plugin</artifactId>
 	            <version>3.0.0</version>
@@ -325,7 +325,9 @@
 	                    </goals>
 	                </execution>
 	            </executions>
-        	</plugin>        	
+        	</plugin> -->
+        	<!-- 可使用assembly把依赖包组装进新的jar里，通常会出现META-INF覆盖问题，需要配置shade插件 -->
+        	<!-- 
         	<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
     			<artifactId>maven-assembly-plugin</artifactId>
@@ -350,8 +352,9 @@
 						</goals>
 					</execution>
 				</executions>
- 			</plugin>			
-			<plugin>
+ 			</plugin> -->
+			<!-- 当把依赖包的classes解压一起打入新包时，会出现META-INF中同名文件覆盖问题，可以使用shade进行文件合并 -->
+			<!-- <plugin>
 		        <groupId>org.apache.maven.plugins</groupId>
 		        <artifactId>maven-shade-plugin</artifactId>
 		        <version>2.4.3</version>
@@ -380,7 +383,78 @@
 		            </execution>
 		        </executions>
 			</plugin> -->
-			
+
+			<!-- 打包时，同时组装出多个不同入口的可执行包(可指定后缀) -->
+			<!-- <plugin>
+		        <groupId>org.apache.maven.plugins</groupId>
+		        <artifactId>maven-shade-plugin</artifactId>
+		        <version>2.4.3</version>			
+				<executions>
+                    <execution>
+                        <id>1</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>shade</goal>
+                        </goals>
+                        <configuration>
+                            <transformers>
+                                <transformer
+                                        implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+                                    <mainClass>com.aliyun.batchcompute.job.logcount.Split</mainClass>
+                                </transformer>
+                                <transformer
+                                        implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
+                                    <resource>applicationContext.xml</resource>
+                                </transformer>
+                            </transformers>
+                            <shadedArtifactAttached>true</shadedArtifactAttached>
+                            <shadedClassifierName>Split</shadedClassifierName>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>2</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>shade</goal>
+                        </goals>
+                        <configuration>
+                            <transformers>
+                                <transformer
+                                        implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+                                    <mainClass>com.aliyun.batchcompute.job.logcount.Count</mainClass>
+                                </transformer>
+                                <transformer
+                                        implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
+                                    <resource>applicationContext.xml</resource>
+                                </transformer>
+                            </transformers>
+                            <shadedArtifactAttached>true</shadedArtifactAttached>
+                            <shadedClassifierName>Count</shadedClassifierName>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>3</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>shade</goal>
+                        </goals>
+                        <configuration>
+                            <transformers>
+                                <transformer
+                                        implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+                                    <mainClass>com.aliyun.batchcompute.job.logcount.Merge</mainClass>
+                                </transformer>
+                                <transformer
+                                        implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
+                                    <resource>applicationContext.xml</resource>
+                                </transformer>
+                            </transformers>
+                            <shadedArtifactAttached>true</shadedArtifactAttached>
+                            <shadedClassifierName>Merge</shadedClassifierName>
+                        </configuration>
+                    </execution>
+                </executions>
+			</plugin> -->
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-war-plugin</artifactId>
