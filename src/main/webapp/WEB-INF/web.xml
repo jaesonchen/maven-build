@@ -14,7 +14,7 @@
 	<!-- dbtype -->
 	<context-param>
 		<param-name>spring.environment.dbtype</param-name>
-		<param-value>${env.db.type}</param-value>
+		<param-value>${db_type}</param-value>
 	</context-param>
 	
 </web-app>

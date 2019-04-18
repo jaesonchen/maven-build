@@ -1,0 +1,1 @@
+java -Dspring.profiles.active=${profile} -Dspring.environment.dbtype=${db_type} -jar maven-build-1.0.0.jar com.asiainfo.Startup
